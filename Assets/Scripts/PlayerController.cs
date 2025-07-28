@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviourPun
 
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine)
+            return;
 
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
