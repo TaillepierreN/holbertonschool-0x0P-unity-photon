@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -18,19 +19,23 @@ public class PlayerStats : MonoBehaviourPun
             healthBar.maxValue = maxHealth;
             healthBar.value = currentHealth;
         }
-        if (photonView.Owner.NickName != null)
+        if (nameText != null && photonView.Owner.NickName != null)
             nameText.text = photonView.Owner.NickName;
     }
 
     [PunRPC]
     public void TakeDamage(int amount)
     {
+        if (currentHealth <= 0) return;
+
         currentHealth -= amount;
         currentHealth = Mathf.Max(currentHealth, 0);
 
-        if (photonView.IsMine && healthBar != null)
+        Debug.Log($"{photonView.Owner.NickName} took {amount} damage, HP now {currentHealth}");
+
+        if (healthBar != null)
         {
-            healthBar.value = currentHealth;
+            StartCoroutine(UpdateHealthBar(currentHealth));
         }
 
         if (currentHealth <= 0)
@@ -39,11 +44,24 @@ public class PlayerStats : MonoBehaviourPun
         }
     }
 
-    private void Die()
+    IEnumerator UpdateHealthBar(float target)
+    {
+        float start = healthBar.value;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / 0.5f;
+            healthBar.value = Mathf.Lerp(start, target, t);
+            yield return null;
+        }
+	}
+
+	private void Die()
     {
         if (photonView.IsMine)
         {
-            gameObject.SetActive(false);
+            Debug.Log("You died. Leaving room...");
+            PhotonNetwork.LeaveRoom();
         }
     }
 }

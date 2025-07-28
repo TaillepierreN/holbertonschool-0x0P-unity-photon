@@ -8,6 +8,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] private TMP_InputField nameInput;
 
 	[SerializeField] private GameObject connectUI;
+	[SerializeField] private GameObject WaitingUI;
 	public Transform[] spawnPositions;
 	public string gameVersion = "0.1";
 
@@ -28,6 +29,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
 		PhotonNetwork.NickName = nameInput.text;
 		PhotonNetwork.JoinRandomOrCreateRoom();
+
 	}
 
 	public override void OnJoinedRoom()
@@ -40,5 +42,6 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Debug.Log($"Instantiating prefab: {prefabName}");
 		PhotonNetwork.Instantiate(prefabName, spawnPos, Quaternion.identity);
 		connectUI.SetActive(false);
+		WaitingUI.SetActive(true);
 	}
 }

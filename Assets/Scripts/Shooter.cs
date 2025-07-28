@@ -22,6 +22,10 @@ public class Shooter : MonoBehaviourPun
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody>().linearVelocity = transform.forward * 10f;
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        bulletScript.shooterActorNumber = photonView.Owner.ActorNumber;
+
         Destroy(bullet, 3f);
     }
 }

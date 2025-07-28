@@ -4,14 +4,20 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int damage = 10;
+    public int shooterActorNumber;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        PhotonView targetView = collision.gameObject.GetComponent<PhotonView>();
+        PhotonView targetView = other.GetComponent<PhotonView>();
+        if (targetView != null && targetView.Owner.ActorNumber == shooterActorNumber)
+            return;
 
-        if (targetView != null && !targetView.IsMine)
+        if (other.CompareTag("Player"))
         {
-            targetView.RPC("TakeDamage", RpcTarget.All, damage);
+            if (targetView != null && targetView.IsMine == false)
+            {
+                targetView.RPC("TakeDamage", RpcTarget.All, damage);
+            }
         }
 
         Destroy(gameObject);
