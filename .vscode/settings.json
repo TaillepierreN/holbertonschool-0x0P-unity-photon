@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "holbertonschool-0x0P-unity-photon.sln"
+    "dotnet.defaultSolution": "holbertonschool-0x0P-unity-photon.sln",
+    "FSharp.suggestGitignore": false
 }
